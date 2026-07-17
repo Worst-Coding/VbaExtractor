@@ -86,7 +86,7 @@ End Sub
 Reconstructing that `.txt` file produces a folder like:
 
 ```
-2026-07-17_14-32_Template/
+YYYY-MM-DD_HH-MM_Template/
 └── Module1.bas
 ```
 
