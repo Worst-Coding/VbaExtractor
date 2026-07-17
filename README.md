@@ -1,58 +1,95 @@
 # VbaExtractor
 
-.swp to .txt - VbaExtractor ist ein Zwei-Wege-Tool zum Umgang mit VBA-Makros in .swp-Dateien.
+Ein Zwei-Wege-Tool zum Umgang mit VBA-Makros in `.swp`-Dateien (z. B. verschlüsselte/gesperrte Office-Vorlagen).
 
-English: .swp to .txt - VbaExtractor is a two-way tool for working with VBA macros in .swp files.
+## Was das Skript macht
 
-## Features
+`VbaExtractor` unterstützt zwei Konvertierungsrichtungen:
 
-- Extrahiert VBA-Makros aus .swp-Dateien und speichert sie als lesbare `.txt`-Dateien.
-- Ermöglicht die Rückschreibung (Two-way): Änderungen in `.txt` können wieder in `.swp` integriert werden.
-- Nützlich für Analyse, Code-Review und Forensik von VBA-Makros.
+1. **`.swp` → `.txt`**
+   Extrahiert den enthaltenen VBA-Code aus einer `.swp`-Datei und speichert alle Module gesammelt in einer lesbaren `.txt`-Datei.
+
+2. **`.txt` → Ordner mit Einzeldateien**
+   Rekonstruiert aus einer zuvor erzeugten `.txt`-Datei die einzelnen VBA-Module als separate Dateien (`.bas`, `.cls`, `.frm`, ...) in einem neuen, mit Datum/Uhrzeit benannten Ordner.
+
+Die Dateiendung der Eingabe entscheidet automatisch, welcher Vorgang ausgeführt wird — es kann also dieselbe `.py`-Datei bzw. `.exe` für beide Richtungen verwendet werden.
+
+## Voraussetzungen
+
+- Python 3.8 oder neuer
+- Das Python-Paket [`oletools`](https://pypi.org/project/oletools/)
 
 ## Installation
 
-1. Repository klonen:
+1. Python installieren (falls noch nicht vorhanden): [python.org/downloads](https://www.python.org/downloads/)
+   Unter Windows beim Installer die Option **"Add Python to PATH"** aktivieren.
+
+2. Benötigtes Paket installieren. Dazu die Eingabeaufforderung (cmd) öffnen und folgenden Befehl ausführen:
+
+   ```bash
+   pip install oletools
+   ```
+
+3. Repository klonen oder `VbaExtractor.py` herunterladen.
+
+## Nutzung
+
+### Drag & Drop (Windows)
+
+Eine oder mehrere `.swp`- oder `.txt`-Dateien einfach auf `VbaExtractor.py` (oder die daraus gebaute `.exe`) ziehen. Das Skript öffnet eine Konsole, verarbeitet alle übergebenen Dateien nacheinander und wartet am Ende auf Enter.
+
+### Über die Kommandozeile
 
 ```bash
-git clone https://github.com/Worst-Coding/VbaExtractor.git
-cd VbaExtractor
+python VbaExtractor.py "C:\Pfad\zur\Datei.swp"
+python VbaExtractor.py "C:\Pfad\zur\Datei.txt"
 ```
 
-2. (Optional) Eine passende Laufzeit installieren (z. B. Python, Node.js). Siehe Projektdateien für Details.
-
-## Benutzung
-
-- Extrahieren:
+Es können auch mehrere Dateien gleichzeitig übergeben werden:
 
 ```bash
-# Beispielkommando — bitte an die tatsächliche Implementierung anpassen
-vbaextractor extract input_file.swp -o output_dir/
+python VbaExtractor.py datei1.swp datei2.swp modul_export.txt
 ```
 
-- Rückschreiben (Inject):
+## Als eigenständige .exe nutzen (ohne Python-Installation)
+
+Um das Tool ohne separate Python-Installation weiterzugeben, kann es mit [PyInstaller](https://pyinstaller.org/) zu einer eigenständigen `.exe` gebündelt werden. Dies muss einmalig auf einem Windows-Rechner mit installiertem Python ausgeführt werden:
 
 ```bash
-# Beispielkommando — bitte an die tatsächliche Implementierung anpassen
-vbaextractor inject modified_macro.txt -i original_file.swp -o updated_file.swp
+pip install pyinstaller oletools
+pyinstaller --onefile --console --name VbaExtractor VbaExtractor.py
 ```
 
-Hinweis: Die genauen CLI-Optionen hängen von der Implementierung ab. Ergänze oder passe diese Beispiele an, wenn die Befehle im Projekt festgelegt sind.
+Die fertige Datei liegt danach unter `dist\VbaExtractor.exe` und kann auf beliebige andere Windows-Systeme kopiert werden — dort läuft sie ohne weitere Installation.
 
-## Beispiele / Use cases
+> **Hinweis:** Falls die `.exe` mit einem `ModuleNotFoundError` abstürzt, hilft meist:
+> ```bash
+> pyinstaller --onefile --console --name VbaExtractor --hidden-import=olefile --hidden-import=oletools.olevba VbaExtractor.py
+> ```
 
-- Makroanalyse: Makros extrahieren, durchlesen und auf verdächtiges Verhalten prüfen.
-- Batch-Verarbeitung: Mehrere `.swp`-Dateien in einem Skript verarbeiten.
-- Forensik / Incident Response: Makrocodes aus beschädigten Dateien rekonstruieren.
+## Beispiel-Ausgabe
 
-## Contribution
+Beim Export einer `.swp`-Datei entsteht eine `.txt`-Datei in etwa folgender Form:
 
-Beiträge, Issues und Verbesserungsvorschläge sind willkommen. Öffne ein Issue oder erstelle einen Pull Request.
+```
+--- VBA-Export aus: Vorlage.swp ---
+
+ ================================================================================
+  >> MODUL: Modul1.bas
+ ================================================================================
+
+Sub Beispiel()
+    MsgBox "Hallo Welt"
+End Sub
+```
+
+Beim Rekonstruieren dieser `.txt`-Datei entsteht ein Ordner wie:
+
+```
+2026-07-17_14-32_Vorlage/
+└── Modul1.bas
+```
 
 ## Lizenz
 
-Bitte eine Lizenzdatei (`LICENSE`) zum Repository hinzufügen oder diesen Abschnitt entsprechend anpassen.
-
-## Kontakt
-
-Für Fragen oder Hilfestellung: Öffne ein Issue im Repository.
+Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).
