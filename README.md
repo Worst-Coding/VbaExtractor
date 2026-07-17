@@ -1,6 +1,6 @@
 # VbaExtractor
 
-A two-way tool for handling VBA macros in `.swp` files (e.g. locked/encrypted Office templates).
+A two-way tool for handling VBA macros in `.swp` files (e.g. SolidWorks Macros).
 
 ## What this script does
 
