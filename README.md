@@ -10,7 +10,8 @@ It supports two conversion directions:
  
 1. **`.swp` → `.txt`**
    Extracts the VBA code contained in a `.swp` file and saves all modules together in one readable `.txt` file.
-2. **`.txt` → folder of individual files**
+   
+3. **`.txt` → folder of individual files**
    Reconstructs the individual VBA modules from a previously exported `.txt` file as separate files (`.bas`, `.cls`, `.frm`, ...) inside a new folder named with the current date/time.
 The file extension of the input determines which operation runs automatically — so the same `.py` file (or `.exe`) can be used for both directions.
 
