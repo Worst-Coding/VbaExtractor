@@ -1,95 +1,95 @@
 # VbaExtractor
 
-Ein Zwei-Wege-Tool zum Umgang mit VBA-Makros in `.swp`-Dateien (z. B. verschlüsselte/gesperrte Office-Vorlagen).
+A two-way tool for handling VBA macros in `.swp` files (e.g. locked/encrypted Office templates).
 
-## Was das Skript macht
+## What this script does
 
-`VbaExtractor` unterstützt zwei Konvertierungsrichtungen:
+`VbaExtractor` supports two conversion directions:
 
 1. **`.swp` → `.txt`**
-   Extrahiert den enthaltenen VBA-Code aus einer `.swp`-Datei und speichert alle Module gesammelt in einer lesbaren `.txt`-Datei.
+   Extracts the VBA code contained in a `.swp` file and saves all modules together in one readable `.txt` file.
 
-2. **`.txt` → Ordner mit Einzeldateien**
-   Rekonstruiert aus einer zuvor erzeugten `.txt`-Datei die einzelnen VBA-Module als separate Dateien (`.bas`, `.cls`, `.frm`, ...) in einem neuen, mit Datum/Uhrzeit benannten Ordner.
+2. **`.txt` → folder of individual files**
+   Reconstructs the individual VBA modules from a previously exported `.txt` file as separate files (`.bas`, `.cls`, `.frm`, ...) inside a new folder named with the current date/time.
 
-Die Dateiendung der Eingabe entscheidet automatisch, welcher Vorgang ausgeführt wird — es kann also dieselbe `.py`-Datei bzw. `.exe` für beide Richtungen verwendet werden.
+The file extension of the input determines which operation runs automatically — so the same `.py` file (or `.exe`) can be used for both directions.
 
-## Voraussetzungen
+## Requirements
 
-- Python 3.8 oder neuer
-- Das Python-Paket [`oletools`](https://pypi.org/project/oletools/)
+- Python 3.8 or newer
+- The Python package [`oletools`](https://pypi.org/project/oletools/)
 
 ## Installation
 
-1. Python installieren (falls noch nicht vorhanden): [python.org/downloads](https://www.python.org/downloads/)
-   Unter Windows beim Installer die Option **"Add Python to PATH"** aktivieren.
+1. Install Python (if not already installed): [python.org/downloads](https://www.python.org/downloads/)
+   On Windows, make sure to enable the **"Add Python to PATH"** option in the installer.
 
-2. Benötigtes Paket installieren. Dazu die Eingabeaufforderung (cmd) öffnen und folgenden Befehl ausführen:
+2. Install the required package. Open the Command Prompt (cmd) and run:
 
    ```bash
    pip install oletools
    ```
 
-3. Repository klonen oder `VbaExtractor.py` herunterladen.
+3. Clone this repository or download `VbaExtractor.py`.
 
-## Nutzung
+## Usage
 
 ### Drag & Drop (Windows)
 
-Eine oder mehrere `.swp`- oder `.txt`-Dateien einfach auf `VbaExtractor.py` (oder die daraus gebaute `.exe`) ziehen. Das Skript öffnet eine Konsole, verarbeitet alle übergebenen Dateien nacheinander und wartet am Ende auf Enter.
+Simply drag one or more `.swp` or `.txt` files onto `VbaExtractor.py` (or the compiled `.exe`). The script opens a console window, processes all provided files one by one, and waits for Enter at the end.
 
-### Über die Kommandozeile
-
-```bash
-python VbaExtractor.py "C:\Pfad\zur\Datei.swp"
-python VbaExtractor.py "C:\Pfad\zur\Datei.txt"
-```
-
-Es können auch mehrere Dateien gleichzeitig übergeben werden:
+### From the command line
 
 ```bash
-python VbaExtractor.py datei1.swp datei2.swp modul_export.txt
+python VbaExtractor.py "C:\path\to\file.swp"
+python VbaExtractor.py "C:\path\to\file.txt"
 ```
 
-## Als eigenständige .exe nutzen (ohne Python-Installation)
+Multiple files can also be passed at once:
 
-Um das Tool ohne separate Python-Installation weiterzugeben, kann es mit [PyInstaller](https://pyinstaller.org/) zu einer eigenständigen `.exe` gebündelt werden. Dies muss einmalig auf einem Windows-Rechner mit installiertem Python ausgeführt werden:
+```bash
+python VbaExtractor.py file1.swp file2.swp modules_export.txt
+```
+
+## Building a standalone .exe (no Python installation required)
+
+To distribute the tool without requiring a separate Python installation, it can be bundled into a standalone `.exe` using [PyInstaller](https://pyinstaller.org/). This needs to be done once on a Windows machine that has Python installed:
 
 ```bash
 pip install pyinstaller oletools
 pyinstaller --onefile --console --name VbaExtractor VbaExtractor.py
 ```
 
-Die fertige Datei liegt danach unter `dist\VbaExtractor.exe` und kann auf beliebige andere Windows-Systeme kopiert werden — dort läuft sie ohne weitere Installation.
+The resulting file will be located at `dist\VbaExtractor.exe` and can then be copied to any other Windows system — it will run there without any further installation.
 
-> **Hinweis:** Falls die `.exe` mit einem `ModuleNotFoundError` abstürzt, hilft meist:
+> **Note:** If the `.exe` crashes with a `ModuleNotFoundError`, this usually fixes it:
 > ```bash
 > pyinstaller --onefile --console --name VbaExtractor --hidden-import=olefile --hidden-import=oletools.olevba VbaExtractor.py
 > ```
 
-## Beispiel-Ausgabe
+## Example output
 
-Beim Export einer `.swp`-Datei entsteht eine `.txt`-Datei in etwa folgender Form:
+Exporting a `.swp` file produces a `.txt` file that looks roughly like this:
 
 ```
---- VBA-Export aus: Vorlage.swp ---
+--- VBA export from: Template.swp ---
 
  ================================================================================
-  >> MODUL: Modul1.bas
+  >> MODULE: Module1.bas
  ================================================================================
 
-Sub Beispiel()
-    MsgBox "Hallo Welt"
+Sub Example()
+    MsgBox "Hello World"
 End Sub
 ```
 
-Beim Rekonstruieren dieser `.txt`-Datei entsteht ein Ordner wie:
+Reconstructing that `.txt` file produces a folder like:
 
 ```
-2026-07-17_14-32_Vorlage/
-└── Modul1.bas
+2026-07-17_14-32_Template/
+└── Module1.bas
 ```
 
-## Lizenz
+## License
 
-Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
