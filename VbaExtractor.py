@@ -5,6 +5,11 @@
 
 WHAT THIS SCRIPT DOES
 --------------------------------------------------------------------------------
+VbaExtractor was built to consolidate VBA macros from .swp files into a
+single text file, so the code can easily be handed to an LLM (e.g. ChatGPT,
+Claude) for further work - analysis, refactoring, documentation, etc. - and
+afterwards reconstructed back into individual module files.
+
 VbaExtractor is a two-way tool for handling VBA macros in .swp files:
 
   1) .swp  ->  .txt
@@ -168,7 +173,7 @@ if __name__ == "__main__":
         ext = os.path.splitext(input_path)[1].lower()
         
         if ext == '.swp':
-            txt_path = os.path.splitext(input_path)[0] + ".txt"
+            txt_path = input_path + ".txt"
             print(f"\nProcessing SWP export: {os.path.basename(input_path)}")
             process_swp_file(input_path, txt_path)
             
