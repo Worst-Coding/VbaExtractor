@@ -1,10 +1,10 @@
 # VbaExtractor
  
-A two-way tool for handling VBA macros in `.swp` files (e.g. locked/encrypted Office templates).
+A two-way tool for handling VBA macros in `.swp` files (SolidWorks Macros).
  
 ## What this script does
  
-`VbaExtractor` was built to consolidate VBA macros from `.swp` files into a single text file, so the code can easily be handed to an LLM (e.g. ChatGPT, Claude) for further work — analysis, refactoring, documentation, etc. — and afterwards reconstructed back into individual module files.
+`VbaExtractor` was built to consolidate VBA macros from `.swp` files into a single text file, so the code can easily be handed to an LLM for further work — analysis, refactoring, documentation, etc. — and afterwards reconstructed back into individual module files.
  
 It supports two conversion directions:
  
